@@ -9,7 +9,7 @@ fn get_num_passphrases(passphrases: &str, with_anagrams: bool) -> usize {
             true => is_valid_passphrase_with_anagram(passphrase),
             false => is_valid_passphrase(passphrase)
         }
-    }).collect::<Vec<&str>>().len()
+    }).count()
 }
 
 fn is_valid_passphrase(passphrase: &str) -> bool {
