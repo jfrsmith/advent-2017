@@ -24,14 +24,19 @@ fn sparse_hash(list: &[(u8, u8)], input: &[u8]) -> Vec<u8> {
     let mut skip = 0;
 
     for _ in 0..64 {
-        (transform_vec, pos, skip) = transform(&transform_vec, input, pos, skip);
+        let transform = transform(&transform_vec, input, pos, skip);
+        transform_vec = transform.0;
+        pos = transform.1;
+        skip = transform.2;
     }
-    
+
     transform_vec.iter().map(|x|x.1).collect::<Vec<u8>>()
 }
 
 fn dense_hash(sparse_hash: &[u8]) -> Vec<u8> {
-    unimplemented!();
+    sparse_hash.chunks(16).map(|x|{
+        x.iter().fold(0, |acc, num| acc ^ num)
+    }).collect::<Vec<u8>>()
 }
 
 fn transform(list: &[(u8,u8)], input: &[u8], start_pos: usize, start_skip: usize) -> (Vec<(u8,u8)>, usize, usize) {
